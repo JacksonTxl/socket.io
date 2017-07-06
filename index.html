@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket.io</title>
+</head>
+<body>
+<p id="pp"></p>
+<input type="text" placeholder="请输入昵称" maxlength="10" id="username">
+<button onclick="send();">send username</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    document.getElementById('pp').innerHTML='正在连接...';
+    var socket = io('http://localhost:8585');
+    socket.on('news', function (data) {
+        document.getElementById('pp').innerHTML=data.hello;
+        console.log(data);
+        socket.emit('my other event', { username: 'demo' });
+    });
+    function send(){
+        var username=document.getElementById('username').value;
+        console.log(username);
+        socket.emit('my other event', { username: username});
+    }
+</script>
+</body>
+</html>
