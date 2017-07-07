@@ -17,3 +17,6 @@ npm run server
 * socket.emit() ：向建立该连接的客户端广播
 * socket.broadcast.emit() ：向除去建立该连接的客户端的所有客户端广播
 * io.sockets.emit() ：向所有客户端广播，等同于上面两个的和
+
+更多server api 请查阅https://github.com/socketio/socket.io/blob/master/docs/API.md <br/>
+更多client api 请查阅https://github.com/socketio/socket.io-client/blob/master/docs/API.md
