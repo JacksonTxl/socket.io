@@ -20,10 +20,28 @@ function handler (req, res) {
             res.end(data);
         });
 }
-
+// var sockets=[];
 io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'hello world !' });
+    // sockets.push({
+    //     id:socket.id,
+    //     socket:socket
+    // });
+    console.log(io.sockets);
+
+    socket.emit('news1', { hello: 'hello world1 !' });
     socket.on('my other event', function (data) {
-        console.log(data);
+
+        // for(var i = 0; i<sockets.length;i++){
+        //     console.log(sockets.length+':'+sockets[i].id+'======'+socket.id);
+        //     if(sockets[i].id!=socket.id){
+        //         sockets[i].socket.emit('news1', { hello: 'hello noon !' });
+        //         console.log(sockets[i].id);
+        //     }
+        // }
     });
+
+});
+io.on('disconnection', function (socket) {
+    socket.emit('news1', { hello: 'disconnection!' });
+    sockets.unshift();
 });
