@@ -6,7 +6,7 @@ const app = require('http').createServer(handler)
 const io = require('socket.io')(app);
 const fs = require('fs');
 
-app.listen(1200);
+app.listen(1201);
 
 function handler (req, res) {
     fs.readFile(__dirname + '/index.html',
@@ -25,29 +25,35 @@ function handler (req, res) {
 const sockets=[];
 
 io.on('connection', function (socket) {
-    sockets.push({
-        id:socket.id,
-        socket:socket
-    });
-    console.log(io.sockets);
+    sockets.push(socket.id);
 
-    socket.emit('login', { hello: '恭喜链接成功！可选择餐厅：' + SelectDinner.diningRooms.join(',') });
+    socket.emit('login', { hello: socket.id + ', 恭喜链接成功！可选择餐厅：' + SelectDinner.diningRooms.join(',') });
+    if (SelectDinner.selected.length >= 0 && SelectDinner.selected.length < 2) {
+      socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
+    } else if (SelectDinner.selected.length === 2 && !SelectDinner.lastSelect) {
+      socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
+      socket.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
+    } else if (SelectDinner.selected.length === 2 && SelectDinner.lastSelect) {
+      socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
+      socket.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
+      socket.emit('disabled');
+    } else {
+      socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
+      socket.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
+      io.sockets.emit('disabled');
+    }
     socket.on('select', function (data) {
       if (SelectDinner.selected.length < 2) {
         SelectDinner.selectRooms(SelectDinner.diningRooms, 6);
         io.sockets.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
-      } else{
+        socket.emit('disabled');
+      } else if (SelectDinner.selected.length === 2)  {
         SelectDinner.selectRooms(SelectDinner.selected, 2);
         io.sockets.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
-
+        io.sockets.emit('disabled');
+      } else {
+        io.sockets.emit('disabled');
       }
-        // for(var i = 0; i<sockets.length;i++){
-        //     console.log(sockets.length+':'+sockets[i].id+'======'+socket.id);
-        //     if(sockets[i].id!=socket.id){
-        //         sockets[i].socket.emit('news1', { hello: 'hello noon !' });
-        //         console.log(sockets[i].id);
-        //     }
-        // }
     });
   socket.on('reset', function (data) {
     SelectDinner.init();
@@ -57,7 +63,7 @@ io.on('connection', function (socket) {
 });
 io.on('disconnection', function (socket) {
     socket.emit('login', { hello: 'disconnection!' });
-    sockets.unshift();
+    sockets.splice(sockets.indexOf(socket.id), 1);
 });
 
 
@@ -76,5 +82,6 @@ const SelectDinner = {
   },
   init: () => {
     SelectDinner.selected = [];
+    SelectDinner.lastSelect = '';
   }
 };

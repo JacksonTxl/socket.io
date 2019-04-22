@@ -10,13 +10,13 @@
 <div id="pp" class="pp"></div>
 <div id="selected" class="pp"></div>
 <div id="lastSelected" class="pp"></div>
-<button onclick="send();" class="button">开始选择</button>
-<button onclick="reset();" class="button">重置</button>
+<button onclick="send();" class="button" id="selectBtn">开始选择</button>
+<button onclick="reset();" class="button" id="resetBtn">重置</button>
 <script src="./socket.io.js"></script>
 <script>
     document.getElementById('pp').innerHTML='正在连接...';
-    // var socket = io('http://47.101.61.10:1200/');
-    var socket = io('http://localhost:1200/');
+    var socket = io('http://47.101.61.10:1201/');
+    // var socket = io('http://localhost:1201/');
     socket.on('login', function (data) {
         document.getElementById('pp').innerHTML=data.hello;
     });
@@ -29,6 +29,15 @@
     socket.on('resetFinish', function (data) {
         document.getElementById('selected').innerHTML='';
         document.getElementById('lastSelected').innerHTML='';
+    });
+    socket.on('disabled', function (data) {
+    	try {
+            document.getElementById('selectBtn').remove();
+            document.getElementById('resetBtn').remove();
+        } catch ( e ) {
+
+        }
+
     });
     function send(){
         socket.emit('select');
