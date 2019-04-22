@@ -2,24 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>socket.io</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>选择午饭就餐地点</title>
+    <link href="index.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-<p id="pp"></p>
-<input type="text" placeholder="请输入昵称" maxlength="10" id="username">
-<button onclick="send();">send username</button>
-<script src="/socket.io/socket.io.js"></script>
+<div id="pp" class="pp"></div>
+<div id="selected" class="pp"></div>
+<div id="lastSelected" class="pp"></div>
+<button onclick="send();" class="button">开始选择</button>
+<button onclick="reset();" class="button">重置</button>
+<script src="./socket.io.js"></script>
 <script>
     document.getElementById('pp').innerHTML='正在连接...';
-    var socket = io('http://192.168.1.4:8585');
-    socket.on('news1', function (data) {
+    // var socket = io('http://47.101.61.10:1200/');
+    var socket = io('http://localhost:1200/');
+    socket.on('login', function (data) {
         document.getElementById('pp').innerHTML=data.hello;
-        console.log(data);
+    });
+    socket.on('selected', function (data) {
+        document.getElementById('selected').innerHTML=data.selected;
+    });
+    socket.on('lastSelected', function (data) {
+        document.getElementById('lastSelected').innerHTML=data.selected;
+    });
+    socket.on('resetFinish', function (data) {
+        document.getElementById('selected').innerHTML='';
+        document.getElementById('lastSelected').innerHTML='';
     });
     function send(){
-        var username=document.getElementById('username').value;
-        console.log(username);
-        socket.emit('my other event', { username: username});
+        socket.emit('select');
+    }
+    function reset(){
+        socket.emit('reset');
     }
 </script>
 </body>

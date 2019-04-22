@@ -1,0 +1,29 @@
+.pp{
+	padding: 15px;
+	height: 100px;
+	border: 1px solid #eee;
+	box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 4px, rgba(0, 0, 0, 0.04) 0px 0px 6px;
+}
+.button{
+	line-height: 1;
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-appearance: none;
+	text-align: center;
+	box-sizing: border-box;
+	outline: none;
+	margin: 0;
+	transition: .1s;
+	font-weight: 500;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	padding: 12px 20px;
+	font-size: 14px;
+	border-radius: 4px;
+	color: #fff;
+	background-color: #409eff;
+	border-color: #409eff;
+	display: block;
+	margin-top: 20px;
+}
