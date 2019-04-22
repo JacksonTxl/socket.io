@@ -26,7 +26,11 @@ const sockets=[];
 
 io.on('connection', function (socket) {
     sockets.push(socket.id);
-
+    const socketReferer = socket.handshake.headers.referer;
+    if (socketReferer.indexOf('DinnerRoomReset') >= 0) {
+      SelectDinner.init();
+      io.sockets.emit('resetFinish');
+    }
     socket.emit('login', { hello: socket.id + ', 恭喜链接成功！可选择餐厅：' + SelectDinner.diningRooms.join(',') });
     if (SelectDinner.selected.length >= 0 && SelectDinner.selected.length < 2) {
       socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
