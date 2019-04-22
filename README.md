@@ -1,4 +1,4 @@
-# 通过node的socket.io 建立长连接
+# socket.io 选择吃饭地点
 ### 安装
 安装socket.io <br/>
 ```
