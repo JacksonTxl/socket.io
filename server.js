@@ -48,7 +48,7 @@ io.on('connection', function (socket) {
     }
     socket.on('select', function (data) {
       if (SelectDinner.selected.length < 2) {
-        SelectDinner.selectRooms(SelectDinner.diningRooms, 6);
+        SelectDinner.selectRooms(SelectDinner.diningRooms, 7);
         io.sockets.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
         socket.emit('disabled');
       } else if (SelectDinner.selected.length === 2)  {
@@ -74,10 +74,10 @@ io.on('disconnection', function (socket) {
 const SelectDinner = {
   lastSelect: '',
   selected: [],
-  diningRooms: ['重庆小面', '蒸菜', '面必居', '楼下炒菜', '罗森', '饭小餐'],
+  diningRooms: ['重庆小面', '蒸菜', '面必居', '楼下炒菜', '罗森', '饭小餐', '陕老顺'],
   selectRooms: (arr, num) => {
     const roomIndex = Math.floor(Math.random() * num);
-    if (num === 6) {
+    if (num === 7) {
       SelectDinner.selected.push(arr[roomIndex]);
     } else {
       SelectDinner.lastSelect = arr[roomIndex];
