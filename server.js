@@ -37,6 +37,7 @@ io.on('connection', function (socket) {
     } else if (SelectDinner.selected.length === 2 && !SelectDinner.lastSelect) {
       socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
       socket.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
+      resetDinnerTime();
     } else if (SelectDinner.selected.length === 2 && SelectDinner.lastSelect) {
       socket.emit('selected', {selected: '已选择餐厅：' + SelectDinner.selected.join(',')});
       socket.emit('lastSelected', {selected: '最终选择餐厅：' + SelectDinner.lastSelect});
@@ -89,3 +90,12 @@ const SelectDinner = {
     SelectDinner.lastSelect = '';
   }
 };
+function resetDinnerTime () {
+  let nowDate = new Date();
+  const times1 = nowDate.getTime();
+  nowDate.setHours(24, 0, 0);
+  const times2 = nowDate.getTime();
+  setTimeout(() => {
+    SelectDinner.init();
+  }, times2 - times1)
+}
